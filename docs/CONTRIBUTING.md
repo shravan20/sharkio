@@ -80,3 +80,4 @@ You can follow the guidelines below for a new feature request:
 ## License
 
 By contributing, you agree that your contributions will be licensed under its [MIT License](./LICENSE).
+
