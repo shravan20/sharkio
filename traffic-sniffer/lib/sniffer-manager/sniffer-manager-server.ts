@@ -20,7 +20,7 @@ export class SnifferManagerServer {
   }
   start() {
     this.server = this.app.listen(this.port, () => {
-      console.log("server started listening on port 5012");
+      console.log("Application Server started listening on port 5012");
     });
   }
 

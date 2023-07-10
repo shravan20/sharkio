@@ -1,3 +1,5 @@
+import { LocalDataManager } from "../data-manager/local-database-manager";
+import { IDatabase } from "../data-manager/database-manager";
 import axios from "axios";
 import { Request } from "express";
 import { v4 } from "uuid";
@@ -21,6 +23,7 @@ export class InterceptedRequest {
   private lastInvocationDate?: Date;
   private invocations: Invocation[];
   private config: PathMetadataConfig;
+  private dataManager: IDatabase;
 
   constructor(key: RequestKey, service: string) {
     this.id = v4();
@@ -31,6 +34,7 @@ export class InterceptedRequest {
     this.lastInvocationDate = undefined;
     this.invocations = [];
     this.config = InterceptedRequest.defaultConfig;
+    this.dataManager = new LocalDataManager();
   }
 
   private logInvocation(request: Request) {
@@ -38,14 +42,30 @@ export class InterceptedRequest {
       this.invocations.shift();
     }
 
-    this.invocations.push({
+    let data = {
       id: v4(),
       timestamp: new Date(),
       body: this.config.recordBodies === true ? request.body : undefined,
       headers: this.config.recordBodies === true ? request.headers : undefined,
       cookies: this.config.recordBodies === true ? request.cookies : undefined,
       params: this.config.recordParams === true ? request.params : undefined,
-    });
+    };
+    console.log(123123);
+    this.invocations.push(data);
+    this.storeLocalDb(data);
+  }
+
+  private async storeLocalDb(data: any) {
+    let query = data.service;
+    let hasItems = await this.dataManager.exists(query);
+    let items: any[] = [];
+
+    if (hasItems) {
+      items = await this.dataManager.read(query);
+    }
+    items = [...items, data];
+
+    this.dataManager.write(this.service, items);
   }
 
   intercept(request: Request) {
