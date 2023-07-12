@@ -327,5 +327,14 @@ export class SnifferManagerController {
         }
       }
     );
+
+    app.get(
+      "/sharkio/sniffer/:port/request-lists",
+      async (req: Request, res: Response) => {
+        res.send({
+          port: req.params.port,
+        });
+      }
+    );
   }
 }

@@ -35,13 +35,14 @@ export class InterceptedRequest {
     this.invocations = [];
     this.config = InterceptedRequest.defaultConfig;
     this.dataManager = new LocalDataManager();
+    console.log(this);
   }
 
   private logInvocation(request: Request) {
     if (this.invocations.length >= this.config.bodyHistoryLimit) {
       this.invocations.shift();
     }
-
+    
     let data = {
       id: v4(),
       timestamp: new Date(),
@@ -50,7 +51,7 @@ export class InterceptedRequest {
       cookies: this.config.recordBodies === true ? request.cookies : undefined,
       params: this.config.recordParams === true ? request.params : undefined,
     };
-    console.log(123123);
+    
     this.invocations.push(data);
     this.storeLocalDb(data);
   }
