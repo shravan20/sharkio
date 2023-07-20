@@ -19,7 +19,6 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { AxiosResponse } from "axios";
 import c from "classnames";
 import { saveAs } from "file-saver";
 import { useEffect, useRef, useState } from "react";
@@ -35,7 +34,7 @@ import { useSnackbar } from "../../hooks/useSnackbar";
 import { SnifferConfig, SnifferCreateConfig } from "../../types/types";
 import styles from "./config-card.module.scss";
 
-type SnifferConfigRow = {
+export type SnifferConfigRow = {
   isNew: boolean;
   config: Partial<SnifferConfig>;
   isStarted: boolean;

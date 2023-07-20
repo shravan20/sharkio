@@ -1,6 +1,12 @@
 import { json } from "body-parser";
 import express, { Express } from "express";
 import * as http from "http";
+import { useLog } from "../log";
+
+const log = useLog({
+  dirname: __dirname,
+  filename: __filename,
+});
 
 interface IController {
   setup(app: Express): void;
