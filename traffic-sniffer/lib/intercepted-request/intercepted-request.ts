@@ -16,6 +16,7 @@ export class InterceptedRequest {
   };
 
   private id: string;
+  private port: number;
   private service: string;
   private url: string;
   private method: string;
@@ -25,9 +26,10 @@ export class InterceptedRequest {
   private config: PathMetadataConfig;
   private dataManager: IDatabase;
 
-  constructor(key: RequestKey, service: string) {
+  constructor(key: RequestKey, service: string, port: number) {
     this.id = v4();
     this.service = service;
+    this.port = port;
     this.method = key.method;
     this.url = key.url;
     this.hitCount = 0;
@@ -35,7 +37,7 @@ export class InterceptedRequest {
     this.invocations = [];
     this.config = InterceptedRequest.defaultConfig;
     this.dataManager = new LocalDataManager();
-    console.log(this);
+    
   }
 
   private logInvocation(request: Request) {
@@ -46,10 +48,10 @@ export class InterceptedRequest {
     let data = {
       id: v4(),
       timestamp: new Date(),
-      body: this.config.recordBodies === true ? request.body : undefined,
-      headers: this.config.recordBodies === true ? request.headers : undefined,
-      cookies: this.config.recordBodies === true ? request.cookies : undefined,
-      params: this.config.recordParams === true ? request.params : undefined,
+      body: this.config.recordBodies ? request.body : undefined,
+      headers: this.config.recordBodies ? request.headers : undefined,
+      cookies: this.config.recordBodies ? request.cookies : undefined,
+      params: this.config.recordParams ? request.params : undefined,
     };
 
     this.invocations.push(data);
@@ -57,10 +59,10 @@ export class InterceptedRequest {
   }
 
   private async storeLocalDb(data: any) {
-    let query = data.service;
+    let query = data.port;
     let hasItems = await this.dataManager.exists(query);
     let items: any[] = [];
-
+    // console.log(query)
     if (hasItems) {
       items = await this.dataManager.read(query);
     }

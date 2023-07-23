@@ -61,7 +61,11 @@ export class Sniffer {
       method: req.method,
       url: req.url,
     });
-    this.interceptedRequests.interceptRequest(req, this.config.name);
+    this.interceptedRequests.interceptRequest(
+      req,
+      this.config.name,
+      this.config.port
+    );
     next();
   }
 
@@ -86,11 +90,18 @@ export class Sniffer {
 
   execute(url: string, method: string, invocation: Invocation) {
     const executionUrl = `http://localhost:${this.config.port}${url}`;
+
+    var nonProxyPort: number = 0;
+    // if (executionUrl.split(":") && executionUrl.split(":").length > 1) {
+    //   nonProxyPort = Number(executionUrl.split(":")[1]);
+    // }
+    console.log("data", { config: this.config });
     return this.interceptedRequests.execute(
       executionUrl,
       method,
       invocation,
-      this.config.name
+      this.config.name,
+      nonProxyPort
     );
   }
 

@@ -10,20 +10,20 @@ export class InterceptedRequests {
     this.requests = new RequestsMap();
   }
 
-  private ensureRequest(key: RequestKey, service: string) {
+  private ensureRequest(key: RequestKey, service: string, port: number) {
     if (this.requests.has(key)) {
       return this.requests.get(key)!;
     } else {
-      const request = new InterceptedRequest(key, service);
+      const request = new InterceptedRequest(key, service, port);
       this.requests.set(key, request);
       return request;
     }
   }
 
-  interceptRequest(request: Request, service: string) {
+  interceptRequest(request: Request, service: string, port: number) {
     const { method, path } = request;
     const key = new RequestKey(method, path);
-    const interceptedRequest = this.ensureRequest(key, service);
+    const interceptedRequest = this.ensureRequest(key, service, port);
     interceptedRequest.intercept(request);
   }
 
@@ -31,11 +31,13 @@ export class InterceptedRequests {
     url: string,
     method: string,
     invocation: Invocation,
-    service: string
+    service: string,
+    port: number
   ) {
     const interceptedRequest = this.ensureRequest(
       new RequestKey(method, url),
-      service
+      service,
+      port
     );
     return interceptedRequest.execute(invocation);
   }

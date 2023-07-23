@@ -283,7 +283,11 @@ export class SnifferManagerController {
         try {
           const { port } = req.params;
           const sniffer = this.snifferManager.getSniffer(Number.parseInt(port));
-
+          let config = await sniffer
+          console.log(
+            "=======>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.",
+            config?.getConfig()
+          );
           if (sniffer) {
             await sniffer.start();
             this.snifferManager.setSnifferConfigToStarted(
@@ -556,7 +560,7 @@ export class SnifferManagerController {
     );
 
     router.get(
-      "/sharkio/sniffer/:port/request-lists",
+      "/port/:port/request-lists",
       async (req: Request, res: Response) => {
         res.send({
           port: req.params.port,
