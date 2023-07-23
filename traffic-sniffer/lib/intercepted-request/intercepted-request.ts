@@ -37,7 +37,6 @@ export class InterceptedRequest {
     this.invocations = [];
     this.config = InterceptedRequest.defaultConfig;
     this.dataManager = new LocalDataManager();
-    
   }
 
   private logInvocation(request: Request) {

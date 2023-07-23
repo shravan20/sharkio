@@ -283,7 +283,7 @@ export class SnifferManagerController {
         try {
           const { port } = req.params;
           const sniffer = this.snifferManager.getSniffer(Number.parseInt(port));
-          let config = await sniffer
+          let config = await sniffer;
           console.log(
             "=======>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.",
             config?.getConfig()
